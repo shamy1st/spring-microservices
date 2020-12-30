@@ -44,5 +44,8 @@ Microservices are small autonomous services that work together.
    * Feign (Easier REST Clients)
 
 4. Visibility and Monitoring
-5. Fault Tolerance
+   * Zipkin Distributed Tracing
+   * Netflix API Gateway
 
+5. Fault Tolerance
+   * Hystrix
