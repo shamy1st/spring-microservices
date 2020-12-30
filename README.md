@@ -100,7 +100,10 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 
 ### 3. Git Repository
 
-
+    //create new directory in your workspace 
+    mkdir git-repository
+    
+    git init
 
 
 
