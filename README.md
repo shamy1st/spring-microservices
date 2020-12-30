@@ -85,7 +85,10 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 ## Centralized Config Server
 
 ![](https://github.com/shamy1st/spring-microservices/blob/main/images/microservices-environments.png)
+
 ![](https://github.com/shamy1st/spring-microservices/blob/main/images/microservice-environments-example.png)
+
+![](https://github.com/shamy1st/spring-microservices/blob/main/images/spring-cloud-config-server.png)
 
 ### 1. Limits Microservice
 
@@ -95,7 +98,7 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 
 ![](https://github.com/shamy1st/spring-microservices/blob/main/images/spring-cloud-config-server-creation.png)
 
-
+### 3. Git Repository
 
 
 
