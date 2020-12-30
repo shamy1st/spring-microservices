@@ -38,6 +38,11 @@ Microservices are small autonomous services that work together.
    ![](https://github.com/shamy1st/spring-microservices/blob/main/images/spring-cloud-config-server.png)
 
 3. Dynamic Load Balancing
+   * Naming Server (Eureka)
+   * Ribbon (Client Side Load Balancing)
+   ![](https://github.com/shamy1st/spring-microservices/blob/main/images/ribbon-load-balancing.png)
+   * Feign (Easier REST Clients)
+
 4. Visibility and Monitoring
 5. Fault Tolerance
 
