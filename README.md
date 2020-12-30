@@ -90,7 +90,7 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 ## 1. Limits Microservice
 
 ![](https://github.com/shamy1st/spring-microservices/blob/main/images/limits-microservice-creation.png)
-
+![](https://github.com/shamy1st/spring-microservices/blob/main/images/spring-cloud-config-server.png)
 
 
 
