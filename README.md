@@ -90,7 +90,55 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 
 ![](https://github.com/shamy1st/spring-microservices/blob/main/images/spring-cloud-config-server.png)
 
-### 1. Limits Microservice
+### 1. Git Repository
+
+    //create new directory in your workspace 
+    mkdir git-repository
+    
+    git init
+    
+    //create limits-service.properties file (default profile)
+        spring.application.name=limits-service
+        server.port=8080
+
+        limits-service.minimum=6
+        limits-service.maximum=7000
+
+    //create limits-service-dev.properties file (dev profile)
+        limits-service.minimum=1
+        limits-service.maximum=111
+
+    //create limits-service-qa.properties file (qa profile)
+        limits-service.minimum=2
+        limits-service.maximum=222
+
+### 2. Spring Cloud Config Server
+
+![](https://github.com/shamy1st/spring-microservices/blob/main/images/spring-cloud-config-server-creation.png)
+
+        @EnableConfigServer
+        @SpringBootApplication
+        public class SpringCloudConfigServerApplication {
+
+            public static void main(String[] args) {
+                SpringApplication.run(SpringCloudConfigServerApplication.class, args);
+            }
+
+        }
+
+        application.properties
+            spring.application.name=spring-cloud-config-server
+            server.port=8888
+
+            spring.cloud.config.server.git.uri=file:///Users/elshamy/Documents/courses/microservices/workspace/git-repository
+
+        link folder to local git-repository
+        
+        url: http://localhost:8888/limits-service/default
+        url: http://localhost:8888/limits-service/dev
+        url: http://localhost:8888/limits-service/qa
+
+### 3. Limits Microservice
 
 ![](https://github.com/shamy1st/spring-microservices/blob/main/images/limits-microservice-creation.png)
 
@@ -151,53 +199,10 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
             }
         }
 
-        application.properties
+        application.properties and then rename it to bootstrap.properties
             spring.application.name=limits-service
-            server.port=8080
-
-            limits-service.minimum=7
-            limits-service.maximum=4000
+            spring.cloud.config.uri=http://localhost:8888
 
         url: http://localhost:8080/limits
 
-### 2. Spring Cloud Config Server
-
-![](https://github.com/shamy1st/spring-microservices/blob/main/images/spring-cloud-config-server-creation.png)
-
-        @EnableConfigServer
-        @SpringBootApplication
-        public class SpringCloudConfigServerApplication {
-
-            public static void main(String[] args) {
-                SpringApplication.run(SpringCloudConfigServerApplication.class, args);
-            }
-
-        }
-
-        application.properties
-            spring.application.name=spring-cloud-config-server
-            server.port=8888
-
-            spring.cloud.config.server.git.uri=file:///Users/elshamy/Documents/courses/microservices/workspace/git-repository
-
-        link folder to local git-repository
-        
-        url: http://localhost:8888/application/default
-
-### 3. Git Repository
-
-    //create new directory in your workspace 
-    mkdir git-repository
-    
-    git init
-    
-    //create limits-service.properties file
-        spring.application.name=limits-service
-        server.port=8080
-
-        limits-service.minimum=6
-        limits-service.maximum=7000
-
-
-
-
+### 4. 
