@@ -94,9 +94,95 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 
 ![](https://github.com/shamy1st/spring-microservices/blob/main/images/limits-microservice-creation.png)
 
+        @RestController
+        public class LimitConfigurationController {
+
+            @Autowired
+            private Configuration configuration;
+
+            @GetMapping("/limits")
+            public LimitConfiguration getLimitConfig() {
+                return new LimitConfiguration(configuration.getMinimum(), configuration.getMaximum());
+            }
+        }
+
+        public class LimitConfiguration {
+            private int minimum;
+            private int maximum;
+
+            public LimitConfiguration() {
+
+            }
+
+            public LimitConfiguration(int minimum, int maximum) {
+                this.minimum = minimum;
+                this.maximum = maximum;
+            }
+
+            public int getMinimum() {
+                return minimum;
+            }
+
+            public int getMaximum() {
+                return maximum;
+            }
+        }
+
+        @Component
+        @ConfigurationProperties("limits-service")
+        public class Configuration {
+            private int minimum;
+            private int maximum;
+
+            public int getMinimum() {
+                return minimum;
+            }
+
+            public void setMinimum(int minimum) {
+                this.minimum = minimum;
+            }
+
+            public int getMaximum() {
+                return maximum;
+            }
+
+            public void setMaximum(int maximum) {
+                this.maximum = maximum;
+            }
+        }
+
+        application.properties
+            spring.application.name=limits-service
+            server.port=8080
+
+            limits-service.minimum=7
+            limits-service.maximum=4000
+
+        url: http://localhost:8080/limits
+
 ### 2. Spring Cloud Config Server
 
 ![](https://github.com/shamy1st/spring-microservices/blob/main/images/spring-cloud-config-server-creation.png)
+
+        @EnableConfigServer
+        @SpringBootApplication
+        public class SpringCloudConfigServerApplication {
+
+            public static void main(String[] args) {
+                SpringApplication.run(SpringCloudConfigServerApplication.class, args);
+            }
+
+        }
+
+        application.properties
+            spring.application.name=spring-cloud-config-server
+            server.port=8888
+
+            spring.cloud.config.server.git.uri=file:///Users/elshamy/Documents/courses/microservices/workspace/git-repository
+
+        link folder to local git-repository
+        
+        url: http://localhost:8888/application/default
 
 ### 3. Git Repository
 
@@ -104,6 +190,13 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
     mkdir git-repository
     
     git init
+    
+    //create limits-service.properties file
+        spring.application.name=limits-service
+        server.port=8080
+
+        limits-service.minimum=6
+        limits-service.maximum=7000
 
 
 
