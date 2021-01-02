@@ -199,7 +199,7 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
             }
         }
 
-        application.properties and then rename it to bootstrap.properties
+        application.properties, rename to bootstrap.properties (change profile: default, dev, qa)
             spring.application.name=limits-service
             spring.cloud.config.uri=http://localhost:8888
             spring.profiles.active=dev
@@ -212,4 +212,11 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 
         url: http://localhost:8080/limits
 
-### 4. 
+### 4. Currency Exchange Microservice
+
+![](https://github.com/shamy1st/spring-microservices/blob/main/images/currency-exchange-service-creation.png)
+
+
+
+
+
