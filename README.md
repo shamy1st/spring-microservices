@@ -202,6 +202,13 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
         application.properties and then rename it to bootstrap.properties
             spring.application.name=limits-service
             spring.cloud.config.uri=http://localhost:8888
+            spring.profiles.active=dev
+            
+        pom.xml (Bootstrap, provided by spring-cloud-commons, is no longer enabled by default)
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-bootstrap</artifactId>
+            </dependency>
 
         url: http://localhost:8080/limits
 
