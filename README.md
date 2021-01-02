@@ -362,9 +362,9 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
         url: http://localhost:8001/exchange-currency/EUR/EGP
         DB: http://localhost:8001/h2-console/
 
-### 5.
+### 5. Currency Conversion Microservice
 
-
+![](https://github.com/shamy1st/spring-microservices/blob/main/images/currency-conversion-service-creation.png)
 
 
 
