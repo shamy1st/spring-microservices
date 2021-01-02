@@ -234,42 +234,89 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
                 <artifactId>h2</artifactId>
                 <scope>runtime</scope>
             </dependency>            
-        
+
         Run/Debug Configurations > Add New Configuration > currency-exchange 8000
             VM options: -Dserver.port=8000
-        
+
         Run/Debug Configurations > Add New Configuration > currency-exchange 8001
             VM options: -Dserver.port=8001
+            
+        application.properties, rename to bootstrap.properties (change profile: default, dev, qa)
+            spring.application.name=currency-exchange-service
 
-        
+            spring.cloud.config.uri=http://localhost:8888
+            spring.profiles.active=default
+
+            spring.datasource.url=jdbc:h2:mem:testdb
+            spring.datasource.driverClassName=org.h2.Driver
+            spring.datasource.username=sa
+            spring.datasource.password=password
+            spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+            spring.jpa.show-sql=true
+            spring.h2.console.enable=true
+
         @RestController
         public class CurrencyExchangeController {
 
             @Autowired
             private Environment environment;
 
+            @Autowired
+            private ExchangeValueService service;
+
             @GetMapping("/exchange-currency/{from}/{to}")
             public ExchangeValue getExchangeValue(@PathVariable String from, @PathVariable String to) {
-                ExchangeValue exchangeValue = new ExchangeValue("EUR", "EGP", 19.22f);
+                ExchangeValue exchangeValue = service.getExchangeValue(from, to);
                 exchangeValue.setPort(Integer.parseInt(environment.getProperty("local.server.port")));
                 return exchangeValue;
             }
         }
 
+        @Service
+        public class ExchangeValueService {
+            @Autowired
+            private ExchangeValueRepository repository;
+
+            public ExchangeValue getExchangeValue(String from, String to) {
+                return repository.findByFromAndTo(from, to);
+            }
+        }
+
+        public interface ExchangeValueRepository extends JpaRepository<ExchangeValue, Integer> {
+            ExchangeValue findByFromAndTo(String from, String to);
+        }
+
+        @Entity(name="exchange_value")
         public class ExchangeValue {
+            @Id
+            private int id;
+            @Column(name="from_currency")
             private String from;
+            @Column(name="to_currency")
             private String to;
+            @Column(name="exchange_value")
             private float value;
+            @Column(name="port")
             private int port;
 
             public ExchangeValue() {
 
             }
 
-            public ExchangeValue(String from, String to, float value) {
+            public ExchangeValue(int id, String from, String to, float value, int port) {
+                this.id = id;
                 this.from = from;
                 this.to = to;
                 this.value = value;
+                this.port = port;
+            }
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
             }
 
             public String getFrom() {
@@ -304,11 +351,16 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
                 this.port = port;
             }
         }
+
+        data.sql
+            INSERT INTO exchange_value (id, from_currency, to_currency, exchange_value, port) VALUES (10001, 'USD', 'EGP', 15.84, 0);
+            INSERT INTO exchange_value (id, from_currency, to_currency, exchange_value, port) VALUES (10002, 'EUR', 'EGP', 19.22, 0);
+            INSERT INTO exchange_value (id, from_currency, to_currency, exchange_value, port) VALUES (10003, 'SAR', 'EGP', 4.22, 0);
         
-        url: http://localhost:8000/exchange-currency/x/y
-        url: http://localhost:8001/exchange-currency/x/y
-
-
+        url: http://localhost:8000/exchange-currency/USD/EGP
+        DB: http://localhost:8000/h2-console/
+        url: http://localhost:8001/exchange-currency/EUR/EGP
+        DB: http://localhost:8001/h2-console/
 
 ### 5.
 
