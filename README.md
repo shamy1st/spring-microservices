@@ -98,9 +98,8 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
     git init
     
     //create limits-service.properties file (default profile)
-        spring.application.name=limits-service
         server.port=8080
-
+        
         limits-service.minimum=6
         limits-service.maximum=7000
 
@@ -111,6 +110,9 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
     //create limits-service-qa.properties file (qa profile)
         limits-service.minimum=2
         limits-service.maximum=222
+        
+    //create currency-exchange-service.properties file (default profile)
+        
 
 ### 2. Spring Cloud Config Server
 
@@ -137,10 +139,17 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
         url: http://localhost:8888/limits-service/default
         url: http://localhost:8888/limits-service/dev
         url: http://localhost:8888/limits-service/qa
+        url: http://localhost:8888/currency-exchange-service/default
 
 ### 3. Limits Microservice
 
 ![](https://github.com/shamy1st/spring-microservices/blob/main/images/limits-microservice-creation.png)
+
+        pom.xml (Bootstrap, provided by spring-cloud-commons, is no longer enabled by default)
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-bootstrap</artifactId>
+            </dependency>
 
         @RestController
         public class LimitConfigurationController {
@@ -201,20 +210,99 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 
         application.properties, rename to bootstrap.properties (change profile: default, dev, qa)
             spring.application.name=limits-service
+            
             spring.cloud.config.uri=http://localhost:8888
             spring.profiles.active=dev
-            
-        pom.xml (Bootstrap, provided by spring-cloud-commons, is no longer enabled by default)
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-bootstrap</artifactId>
-            </dependency>
 
         url: http://localhost:8080/limits
 
 ### 4. Currency Exchange Microservice
 
 ![](https://github.com/shamy1st/spring-microservices/blob/main/images/currency-exchange-service-creation.png)
+
+        pom.xml
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-bootstrap</artifactId>
+            </dependency>
+        
+        Run/Debug Configurations > Add New Configuration > currency-exchange 8000
+            VM options: -Dserver.port=8000
+        
+        Run/Debug Configurations > Add New Configuration > currency-exchange 8001
+            VM options: -Dserver.port=8001
+
+        
+        @RestController
+        public class CurrencyExchangeController {
+
+            @Autowired
+            private Environment environment;
+
+            @GetMapping("/exchange-currency/{from}/{to}")
+            public ExchangeValue getExchangeValue(@PathVariable String from, @PathVariable String to) {
+                ExchangeValue exchangeValue = new ExchangeValue("EUR", "EGP", 19.22f);
+                exchangeValue.setPort(Integer.parseInt(environment.getProperty("local.server.port")));
+                return exchangeValue;
+            }
+        }
+
+        public class ExchangeValue {
+            private String from;
+            private String to;
+            private float value;
+            private int port;
+
+            public ExchangeValue() {
+
+            }
+
+            public ExchangeValue(String from, String to, float value) {
+                this.from = from;
+                this.to = to;
+                this.value = value;
+            }
+
+            public String getFrom() {
+                return from;
+            }
+
+            public void setFrom(String from) {
+                this.from = from;
+            }
+
+            public String getTo() {
+                return to;
+            }
+
+            public void setTo(String to) {
+                this.to = to;
+            }
+
+            public float getValue() {
+                return value;
+            }
+
+            public void setValue(float value) {
+                this.value = value;
+            }
+
+            public int getPort() {
+                return port;
+            }
+
+            public void setPort(int port) {
+                this.port = port;
+            }
+        }
+        
+        url: http://localhost:8000/exchange-currency/x/y
+        url: http://localhost:8001/exchange-currency/x/y
+
+
+
+### 5.
+
 
 
 
