@@ -673,7 +673,14 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 
 ## Visibility and Monitoring
 
-### 1. Netflix API Gateway
+### 1. Zuul API Gateway
+
+* Authentication, Authorization, Security
+* Rate Limits
+* Fault Tolerance
+* Service Aggregation
+
+![](https://github.com/shamy1st/spring-microservices/blob/main/images/zuul-api-gateway-server-creation.png)
 
 
 
