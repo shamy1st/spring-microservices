@@ -120,6 +120,8 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 
 ### 2. Spring Cloud Config Server
 
+![](https://github.com/shamy1st/spring-microservices/blob/main/images/spring-cloud-config-server.png)
+
 ![](https://github.com/shamy1st/spring-microservices/blob/main/images/spring-cloud-config-server-creation.png)
 
         @EnableConfigServer
@@ -546,6 +548,8 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 
 ### 2. Ribbon (Client Side Load Balancing)
 
+![](https://github.com/shamy1st/spring-microservices/blob/main/images/ribbon-load-balancing.png)
+
 * Not all Spring Boot versions are unstable - work in progress.
 * I tried the latest version of Spring Boot 2.4.1 and isn't working.
 * [Compatable versions] Spring Boot - **2.3.1.RELEASE** and Spring Cloud - **Hoxton.SR5**.
@@ -585,8 +589,12 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 
 ### 3. Naming Server (Eureka)
 
+![](https://github.com/shamy1st/spring-microservices/blob/main/images/eureka-naming-server.png)
+
 * If you want to auto-register services without configure it to properties file like (currency-conversion-service)
 * Then you need to eureka-naming-server
+
+![](https://github.com/shamy1st/spring-microservices/blob/main/images/eureka-naming-server-creation.png)
 
         @EnableEurekaServer
         @SpringBootApplication
@@ -671,7 +679,7 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 
 ### 2. Zipkin Distributed Tracing (RabbitMQ)
 
-
+![](https://github.com/shamy1st/spring-microservices/blob/main/images/zipkin-distributed-tracing.png)
 
 
 
