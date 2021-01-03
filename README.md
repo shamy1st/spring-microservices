@@ -497,6 +497,13 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
             }
         }
 
+        @FeignClient(name="currency-exchange-service", url="localhost:8000")
+        public interface CurrencyExchangeServiceProxy {
+
+            @GetMapping("/exchange-currency/{from}/{to}")
+            public CurrencyConversion getExchangeValue(@PathVariable String from, @PathVariable String to);
+        }
+
         @RestController
         public class CurrencyConversionController {
 
