@@ -294,8 +294,8 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
             private String from;
             @Column(name="to_currency")
             private String to;
-            @Column(name="exchange_value")
-            private float value;
+            @Column(name="rate")
+            private float rate;
             @Column(name="port")
             private int port;
 
@@ -303,11 +303,11 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 
             }
 
-            public ExchangeValue(int id, String from, String to, float value, int port) {
+            public ExchangeValue(int id, String from, String to, float rate, int port) {
                 this.id = id;
                 this.from = from;
                 this.to = to;
-                this.value = value;
+                this.rate = rate;
                 this.port = port;
             }
 
@@ -335,12 +335,12 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
                 this.to = to;
             }
 
-            public float getValue() {
-                return value;
+            public float getRate() {
+                return rate;
             }
 
-            public void setValue(float value) {
-                this.value = value;
+            public void setRate(float rate) {
+                this.rate = rate;
             }
 
             public int getPort() {
@@ -353,9 +353,9 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
         }
 
         data.sql
-            INSERT INTO exchange_value (id, from_currency, to_currency, exchange_value, port) VALUES (10001, 'USD', 'EGP', 15.84, 0);
-            INSERT INTO exchange_value (id, from_currency, to_currency, exchange_value, port) VALUES (10002, 'EUR', 'EGP', 19.22, 0);
-            INSERT INTO exchange_value (id, from_currency, to_currency, exchange_value, port) VALUES (10003, 'SAR', 'EGP', 4.22, 0);
+            INSERT INTO exchange_value (id, from_currency, to_currency, rate, port) VALUES (10001, 'USD', 'EGP', 15.84, 0);
+            INSERT INTO exchange_value (id, from_currency, to_currency, rate, port) VALUES (10002, 'EUR', 'EGP', 19.22, 0);
+            INSERT INTO exchange_value (id, from_currency, to_currency, rate, port) VALUES (10003, 'SAR', 'EGP', 4.22, 0);
         
         url: http://localhost:8000/exchange-currency/USD/EGP
         DB: http://localhost:8000/h2-console/
@@ -366,6 +366,114 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 
 ![](https://github.com/shamy1st/spring-microservices/blob/main/images/currency-conversion-service-creation.png)
 
+        Run/Debug Configurations > Add New Configuration > currency-conversion 8100
+            VM options: -Dserver.port=8100
 
+        @RestController
+        public class CurrencyConversionController {
 
+            @Autowired
+            private Environment environment;
 
+            @GetMapping("/currency-conversion/{from}/{to}/{quantity}")
+            public CurrencyConversion getExchangeValue(@PathVariable String from,
+                                                    @PathVariable String to,
+                                                    @PathVariable float quantity) {
+                Map<String, String> params = new HashMap<>();
+                params.put("from", from);
+                params.put("to", to);
+                ResponseEntity<CurrencyConversion> response = new RestTemplate().getForEntity(
+                "http://localhost:8000/exchange-currency/{from}/{to}", CurrencyConversion.class, params);
+
+                CurrencyConversion currencyConversion = response.getBody();
+                currencyConversion.setQuantity(quantity);
+                currencyConversion.setPort(Integer.parseInt(environment.getProperty("local.server.port")));
+                return currencyConversion;
+            }
+        }
+
+        public class CurrencyConversion {
+            private int id;
+            private String from;
+            private String to;
+            private float quantity;
+            private float rate;
+            private float total;
+            private int port;
+
+            public CurrencyConversion() {
+
+            }
+
+            public CurrencyConversion(int id, String from, String to, float quantity, float exchangeValue, int port) {
+                this.id = id;
+                this.from = from;
+                this.to = to;
+                this.quantity = quantity;
+                this.rate = exchangeValue;
+                this.total = quantity * exchangeValue;
+                this.port = port;
+            }
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
+
+            public String getFrom() {
+                return from;
+            }
+
+            public void setFrom(String from) {
+                this.from = from;
+            }
+
+            public String getTo() {
+                return to;
+            }
+
+            public void setTo(String to) {
+                this.to = to;
+            }
+
+            public float getQuantity() {
+                return quantity;
+            }
+
+            public void setQuantity(float quantity) {
+                this.quantity = quantity;
+                this.total = this.quantity * this.rate;
+            }
+
+            public float getRate() {
+                return rate;
+            }
+
+            public void setRate(float rate) {
+                this.rate = rate;
+                this.total = this.quantity * this.rate;
+            }
+
+            public float getTotal() {
+                return total;
+            }
+
+            public void setTotal(float total) {
+                this.total = total;
+            }
+
+            public int getPort() {
+                return port;
+            }
+
+            public void setPort(int port) {
+                this.port = port;
+            }
+        }
+
+        url: http://localhost:8100/currency-conversion/USD/EGP/100
+
+### 6. 
