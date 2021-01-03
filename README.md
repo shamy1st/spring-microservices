@@ -90,6 +90,8 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 
 ![](https://github.com/shamy1st/spring-microservices/blob/main/images/microservice-environments-example.png)
 
+![](https://github.com/shamy1st/spring-microservices/blob/main/images/currency-conversion-service-instances.png)
+
 ![](https://github.com/shamy1st/spring-microservices/blob/main/images/spring-cloud-config-server.png)
 
 ### 1. Git Repository
@@ -542,7 +544,7 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 
         url: http://localhost:8100/currency-conversion-feign/USD/EGP/100
 
-### 2. Ribbon
+### 2. Ribbon (Client Side Load Balancing)
 
 
 
