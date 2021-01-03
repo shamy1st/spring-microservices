@@ -546,21 +546,21 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 
 ### 2. Ribbon (Client Side Load Balancing)
 
-* Spring Boot 2.2.0 and later versions are still unstable - work in progress.
+* Not all Spring Boot versions are unstable - work in progress.
 * I tried the latest version of Spring Boot 2.4.1 and isn't working.
-* Use Spring Boot - **2.1.1.RELEASE** and Spring Cloud - **Greenwich.SR6**.
-* Or Use Spring Boot - **2.3.1.RELEASE** and Spring Cloud - **Hoxton.SR5**.
+* [Compatable versions] Spring Boot - **2.3.1.RELEASE** and Spring Cloud - **Hoxton.SR5**.
+* [Compatable versions] Spring Boot - **2.1.1.RELEASE** and Spring Cloud - **Greenwich.SR6**.
 * [Feign and Ribbon latest updates](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-feign-and-ribbon)
 
         pom.xml
             <parent>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-parent</artifactId>
-                <version>2.1.1.RELEASE</version>
+                <version>2.3.1.RELEASE</version>
                 <relativePath/> <!-- lookup parent from repository -->
             </parent>
 
-            <spring-cloud.version>Greenwich.SR6</spring-cloud.version>
+            <spring-cloud.version>Hoxton.SR5</spring-cloud.version>
 
 * Ribbon Implementation
 
@@ -585,9 +585,32 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 
 ### 3. Naming Server (Eureka)
 
+* If you want to auto-register services without configure it to properties file like (currency-conversion-service)
+* Then you need to eureka-naming-server
+
+        @EnableEurekaServer
+        @SpringBootApplication
+        public class EurekaNamingServerApplication {
+
+            public static void main(String[] args) {
+                SpringApplication.run(EurekaNamingServerApplication.class, args);
+            }
+        }
+
+        application.properties
+            spring.applicaation.name=eureka-naming-server
+            server.port=8761
+
+            eureka.client.register-with-eureka=false
+            eureka.client.fetch-registry=false
+
+        url: http://localhost:8761/
+
+* connect eureka server
 
 
 
 
+### 4. 
 
 
