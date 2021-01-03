@@ -549,6 +549,8 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 * Spring Boot 2.2.0 and later versions are still unstable - work in progress.
 * I tried the latest version of Spring Boot 2.4.1 and isn't working.
 * Use Spring Boot - **2.1.1.RELEASE** and Spring Cloud - **Greenwich.SR6**.
+* Or Use Spring Boot - **2.3.1.RELEASE** and Spring Cloud - **Hoxton.SR5**.
+* [Feign and Ribbon latest updates](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-feign-and-ribbon)
 
         pom.xml
             <parent>
@@ -581,7 +583,7 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 
             currency-exchange-service.ribbon.listOfServers=http://localhost:8000,http://localhost:8001
 
-### 3.
+### 3. Naming Server (Eureka)
 
 
 
