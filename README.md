@@ -482,7 +482,7 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 
 ## Dynamic Load Balancing
 
-### 1. Feign - Solve calling REST microservice
+### 1. Feign - Easier calling REST service
 
         pom.xml
             <dependency>
@@ -545,6 +545,47 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
         url: http://localhost:8100/currency-conversion-feign/USD/EGP/100
 
 ### 2. Ribbon (Client Side Load Balancing)
+
+* Spring Boot 2.2.0 and later versions are still unstable - work in progress.
+* I tried the latest version of Spring Boot 2.4.1 and isn't working.
+* Use Spring Boot - **2.1.1.RELEASE** and Spring Cloud - **Greenwich.SR6**.
+
+        pom.xml
+            <parent>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-parent</artifactId>
+                <version>2.1.1.RELEASE</version>
+                <relativePath/> <!-- lookup parent from repository -->
+            </parent>
+
+            <spring-cloud.version>Greenwich.SR6</spring-cloud.version>
+
+* Ribbon Implementation
+
+        pom.xml
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+            </dependency>
+
+        @FeignClient(name="currency-exchange-service")
+        @RibbonClient(name="currency-exchange-service")
+        public interface CurrencyExchangeServiceProxy {
+
+            @GetMapping("/exchange-currency/{from}/{to}")
+            CurrencyConversion getExchangeValue(@PathVariable String from, @PathVariable String to);
+        }
+
+        application.properties
+            spring.applicaation.name=currency-conversion-service
+
+            currency-exchange-service.ribbon.listOfServers=http://localhost:8000,http://localhost:8001
+
+### 3.
+
+
+
+
 
 
 
