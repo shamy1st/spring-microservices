@@ -84,7 +84,7 @@ Zuul - Currency Exchange & Exchange Services | http://localhost:8765/currency-ex
 Zipkin                                       | http://localhost:9411/zipkin/
 Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bus-refresh (POST)
 
-## Centralized Config Server
+## Configuration Management (Centralized Config Server)
 
 ![](https://github.com/shamy1st/spring-microservices/blob/main/images/microservices-environments.png)
 
@@ -478,4 +478,64 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 
         url: http://localhost:8100/currency-conversion/USD/EGP/100
 
-### 6. 
+## Dynamic Load Balancing
+
+### 1. Feign - Solve calling REST microservice
+
+        pom.xml
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-openfeign</artifactId>
+            </dependency>
+
+        @EnableFeignClients("com.shamy1st.currencyconversionservice")
+        @SpringBootApplication
+        public class CurrencyConversionServiceApplication {
+
+            public static void main(String[] args) {
+                SpringApplication.run(CurrencyConversionServiceApplication.class, args);
+            }
+        }
+
+        @RestController
+        public class CurrencyConversionController {
+
+            @Autowired
+            private Environment environment;
+
+            @Autowired
+            private CurrencyExchangeServiceProxy serviceProxy;
+
+            @GetMapping("/currency-conversion/{from}/{to}/{quantity}")
+            public CurrencyConversion getExchangeValue(@PathVariable String from,
+                                                    @PathVariable String to,
+                                                    @PathVariable float quantity) {
+                Map<String, String> params = new HashMap<>();
+                params.put("from", from);
+                params.put("to", to);
+                ResponseEntity<CurrencyConversion> response = new RestTemplate().getForEntity(
+                "http://localhost:8000/exchange-currency/{from}/{to}", CurrencyConversion.class, params);
+
+                CurrencyConversion currencyConversion = response.getBody();
+                currencyConversion.setQuantity(quantity);
+                currencyConversion.setPort(Integer.parseInt(environment.getProperty("local.server.port")));
+                return currencyConversion;
+            }
+
+            @GetMapping("/currency-conversion-feign/{from}/{to}/{quantity}")
+            public CurrencyConversion getExchangeValueFeign(@PathVariable String from,
+                                                    @PathVariable String to,
+                                                    @PathVariable float quantity) {
+                CurrencyConversion currencyConversion = serviceProxy.getExchangeValue(from, to);
+                currencyConversion.setQuantity(quantity);
+                currencyConversion.setPort(Integer.parseInt(environment.getProperty("local.server.port")));
+                return currencyConversion;
+            }
+        }
+
+        url: http://localhost:8100/currency-conversion-feign/USD/EGP/100
+
+### 2. Ribbon
+
+
+
