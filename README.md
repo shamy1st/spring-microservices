@@ -39,12 +39,14 @@ Microservices are small autonomous services that work together.
 
 3. Dynamic Load Balancing
    * Naming Server (Eureka)
+   ![](https://github.com/shamy1st/spring-microservices/blob/main/images/eureka-naming-server.png)
    * Ribbon (Client Side Load Balancing)
    ![](https://github.com/shamy1st/spring-microservices/blob/main/images/ribbon-load-balancing.png)
    * Feign (Easier REST Clients)
 
 4. Visibility and Monitoring
    * Zipkin Distributed Tracing
+   ![](https://github.com/shamy1st/spring-microservices/blob/main/images/zipkin-distributed-tracing.png)
    * Netflix API Gateway
 
 5. Fault Tolerance
