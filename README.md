@@ -682,6 +682,62 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 
 ![](https://github.com/shamy1st/spring-microservices/blob/main/images/zuul-api-gateway-server-creation.png)
 
+* setup
+
+        pom.xml
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
+                <version>2.2.6.RELEASE</version>
+            </dependency>
+
+        @EnableZuulProxy
+        @EnableDiscoveryClient
+        @SpringBootApplication
+        public class ZuulApiGatewayServerApplication {
+
+            public static void main(String[] args) {
+                SpringApplication.run(ZuulApiGatewayServerApplication.class, args);
+            }
+        }
+
+        application.properties
+            spring.application.name=zuul-api-gateway-server
+            server.port=8765
+            eureka.client.service-url.default-zone=http://localhost:8761/
+
+* logging any request route through gateway
+
+        @Component
+        public class LoggingFilter extends ZuulFilter {
+
+            private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+            @Override
+            public String filterType() {
+                return "pre";// "pre" or "post" or "error"
+            }
+
+            @Override
+            public int filterOrder() {
+                return 1;// order 1
+            }
+
+            @Override
+            public boolean shouldFilter() {
+                return true;
+            }
+
+            @Override
+            public Object run() throws ZuulException {
+                HttpServletRequest request = RequestContext.getCurrentContext().getRequest();
+                logger.info("request -> {} request.uri -> {}", request, request.getRequestURI());
+                return null;
+            }
+        }
+
+* 
+
 
 
 ### 2. Zipkin Distributed Tracing (RabbitMQ)
