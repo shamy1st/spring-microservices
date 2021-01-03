@@ -606,10 +606,54 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 
         url: http://localhost:8761/
 
-* connect eureka server
+* connect **currency conversion service** with **eureka server**
 
+        pom.xml
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            </dependency>
 
+        @EnableDiscoveryClient
+        @EnableFeignClients("com.shamy1st.currencyconversionservice")
+        @SpringBootApplication
+        public class CurrencyConversionServiceApplication {
 
+            public static void main(String[] args) {
+                SpringApplication.run(CurrencyConversionServiceApplication.class, args);
+            }
+        }
+
+        application.properties
+            spring.applicaation.name=currency-conversion-service
+
+            currency-exchange-service.ribbon.listOfServers=http://localhost:8000,http://localhost:8001
+            eureka.client.service-url.default-zone=http://localhost:8761/
+
+* connect **currency exchange service** with **eureka server**
+
+        pom.xml
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            </dependency>
+
+        @EnableDiscoveryClient
+        @SpringBootApplication
+        public class CurrencyExchangeServiceApplication {
+
+            public static void main(String[] args) {
+                SpringApplication.run(CurrencyExchangeServiceApplication.class, args);
+            }
+        }
+
+        application.properties
+            ....
+            eureka.client.service-url.default-zone=http://localhost:8761/
+
+* connect **limits service** with **eureka server**
+
+        //the same steps
 
 ### 4. 
 
