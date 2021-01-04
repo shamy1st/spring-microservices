@@ -76,11 +76,11 @@ Application                                  | URL
 ---------------------------------------------|-----
 Limits Service                               | http://localhost:8080/limits http://localhost:8080/actuator/refresh (POST) 
 Spring Cloud Config Server                   | http://localhost:8888/limits-service/default http://localhost:8888/limits-service/dev
-Currency Converter Service - Direct Call     | http://localhost:8100/currency-conversion/USD/EGP/10
-Currency Converter Service - Feign           | http://localhost:8100/currency-conversion-feign/EUR/EGP/10000
-Currency Exchange Service                    | http://localhost:8000/exchange-currency/EUR/EGP http://localhost:8001/exchange-currency/USD/EGP
-Eureka Naming Server                         | http://localhost:8761/
-Zuul - Currency Exchange & Exchange Services | http://localhost:8765/currency-exchange-service/exchange-currency/EUR/EGP http://localhost:8765/currency-conversion-service/currency-conversion-feign/USD/EGP/10
+Currency Converter Service - Direct Call     | http://localhost:8100/currency-converter/from/USD/to/EGP/quantity/10
+Currency Converter Service - Feign           | http://localhost:8100/currency-converter-feign/from/EUR/to/EGP/quantity/10000
+Currency Exchange Service                    | http://localhost:8000/currency-exchange/from/EUR/to/EGP http://localhost:8001/currency-exchange/from/USD/to/EGP
+Eureka                                       | http://localhost:8761/
+Zuul - Currency Exchange & Exchange Services | http://localhost:8765/currency-exchange-service/currency-exchange/from/EUR/to/EGP http://localhost:8765/currency-conversion-service/currency-converter-feign/from/USD/to/EGP/quantity/10
 Zipkin                                       | http://localhost:9411/zipkin/
 Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bus-refresh (POST)
 
@@ -736,9 +736,33 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
             }
         }
 
-* 
+* invoke any request through zuul gateway api
 
+  * for example call currency exchange service: http://localhost:8000/exchange-currency/EUR/EGP
+  * zuul url: http://localhost:8765/{application-name}/{uri}
+  * currency exchange service application-name: **currency-exchange-service**
+  * currency exchange service uri: **exchange-currency/EUR/EGP**
+  * zuul url: http://localhost:8765/currency-exchange-service/exchange-currency/EUR/EGP
+  * now you can see the log of this request in zuul console
 
+* **currency-conversion** service call currency-exchange through zuul gateway api
+
+        //@FeignClient(name="currency-exchange-service")
+        @FeignClient(name="zuul-api-gateway-server")
+        @RibbonClient(name="currency-exchange-service")
+        public interface CurrencyExchangeServiceProxy {
+
+            //@GetMapping("/exchange-currency/{from}/{to}")
+            @GetMapping("/currency-exchange-service/exchange-currency/{from}/{to}")
+            CurrencyConversion getExchangeValue(@PathVariable String from, @PathVariable String to);
+        }
+
+        hite url: http://localhost:8100/currency-conversion-feign/EUR/EGP/100
+        now you can see the request log in zuul gateway api console
+
+        zuul url: http://localhost:8765/{application-name}/{uri}
+        zuul url: http://localhost:8765/currency-conversion-service/currency-conversion-feign/EUR/EGP/100
+        now you can see two requests logs in zuul gateway api console (one for currency-conversion and one for currency-exchange)
 
 ### 2. Zipkin Distributed Tracing (RabbitMQ)
 
