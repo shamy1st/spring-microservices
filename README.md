@@ -873,16 +873,77 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 
 * [Debugging Problems with Zipkin](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-zipkin)
 
-## Spring Cloud Bus
+### Spring Cloud Bus
 
+![](https://github.com/shamy1st/spring-microservices/blob/main/images/spring-cloud-config-server.png)
 
+* run spring cloud config server
+* run limits service
+* if you set profile to "qa" for example and then make change in git-repository in limits-service-qa.properties
+* now you can't see the change in limits service
+* add this line to bootstrap.properties: management.endpoints.web.exposure.include=*
+* to see the change make post request to http://localhost:8080/actuator/refresh using postman
+* now you can see the change, but if you have multiple instances of this service then you need to hit refresh for each instance
+* the solution is to use **spring cloud bus**
 
+* **Implementing Spring Cloud Bus**
 
+* add dependency in config server and limits service
 
+        pom.xml
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-bus-amqp</artifactId>
+            </dependency>
 
+* run rabbitMQ: /usr/local/sbin/rabbitmq-server
+* run spring cloud config server
+* run limits service
+* make change in git-repository
+* to see the change make post request to http://localhost:8080/actuator/bus-refresh using postman
+* now all instances of limits-service are refreshed
+* it's not working for me!
 
+## Fault Tolerance (Hystrix)
 
+        pom.xml
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+                <version>2.2.6.RELEASE</version>
+            </dependency>
 
+        @EnableHystrix
+        @EnableDiscoveryClient
+        @SpringBootApplication
+        public class LimitsServiceApplication {
 
+            public static void main(String[] args) {
+                SpringApplication.run(LimitsServiceApplication.class, args);
+            }
+        }
 
+        @RestController
+        public class LimitConfigurationController {
 
+            @Autowired
+            private Configuration configuration;
+
+            @GetMapping("/limits")
+            public LimitConfiguration getLimitConfig() {
+                return new LimitConfiguration(configuration.getMinimum(), configuration.getMaximum());
+            }
+
+            @GetMapping("/fault-tolerance-example")
+            @HystrixCommand(fallbackMethod="fallbackLimitConfigExample")
+            public RuntimeException getLimitConfigExample() {
+                return new RuntimeException("Not Available!");
+            }
+
+            public LimitConfiguration fallbackLimitConfigExample() {
+                return new LimitConfiguration(9, 999);
+            }
+        }
+
+* now hit url: http://localhost:8080/fault-tolerance-example
+* you will see the default values 9,999 from fallback method.
