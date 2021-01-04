@@ -844,7 +844,7 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
   * java -jar zipkin-server-2.23.2-exec.jar
   * http://localhost:9411/zipkin/
   * now make Zipkin listen to RabbitMQ
-  * RABBIT_URI =amqp://localhost java -jar zipkin-server-2.23.2-exec.jar (on windows two seperate commands)
+  * RABBIT_URI=amqp://localhost java -jar zipkin-server-2.23.2-exec.jar (on windows two seperate commands)
 
 
 
