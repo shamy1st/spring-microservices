@@ -757,7 +757,7 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
             CurrencyConversion getExchangeValue(@PathVariable String from, @PathVariable String to);
         }
 
-        hite url: http://localhost:8100/currency-conversion-feign/EUR/EGP/100
+        hit url: http://localhost:8100/currency-conversion-feign/EUR/EGP/100
         now you can see the request log in zuul gateway api console
 
         zuul url: http://localhost:8765/{application-name}/{uri}
@@ -806,7 +806,7 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
   * Add Sleuth to Currency Conversion Service (same as zuul)
     * additionally put some logs
   
-  * hite url: http://localhost:8100/currency-conversion-feign/EUR/EGP/100
+  * hit url: http://localhost:8100/currency-conversion-feign/EUR/EGP/100
   
   * **Currency Conversion Log**: 
   2021-01-04 10:55:07.719  INFO [currency-conversion-service,**cfde54c8b6cae01e**,cfde54c8b6cae01e,true] 62608 --- [nio-8100-exec-3] c.s.c.rest.CurrencyConversionController  : com.shamy1st.currencyconversionservice.bean.CurrencyConversion@15343b67
@@ -864,8 +864,16 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 
 * **Using Zipkin UI Dashboard to trace requests**
 
+  * run rabbitMQ: /usr/local/sbin/rabbitmq-server
+  * run zipkin: RABBIT_URI=amqp://localhost java -jar zipkin-server-2.23.2-exec.jar
+  * run eureka-naming-server, zuul-api-gateway-server, currency-exchange-service, currency-conversion-service
+  * eureka: http://localhost:8761/
+  * zipkin: http://localhost:9411/zipkin/
+  * hit url: http://localhost:8100/currency-conversion-feign/EUR/EGP/100
 
 * [Debugging Problems with Zipkin](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-zipkin)
+
+## Spring Cloud Bus
 
 
 
