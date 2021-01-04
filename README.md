@@ -807,6 +807,12 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
     * additionally put some logs
   
   * hite url: http://localhost:8100/currency-conversion-feign/EUR/EGP/100
+  
+  * **Currency Conversion Log**: 2021-01-04 10:55:07.719  INFO [currency-conversion-service,**cfde54c8b6cae01e**,cfde54c8b6cae01e,true] 62608 --- [nio-8100-exec-3] c.s.c.rest.CurrencyConversionController  : com.shamy1st.currencyconversionservice.bean.CurrencyConversion@15343b67
+  * **Zuul Log**: 2021-01-04 10:55:07.626  INFO [zuul-api-gateway-server,**cfde54c8b6cae01e**,3b909545b1e21084,true] 52938 --- [nio-8765-exec-3] c.s.zuulapigatewayserver.LoggingFilter   : request -> org.springframework.cloud.netflix.zuul.filters.pre.Servlet30RequestWrapper@31642a3d request.uri -> /currency-exchange-service/exchange-currency/EUR/EGP
+  * **Currency Exchange Log**: 2021-01-04 10:55:07.642  INFO [currency-exchange-service,**cfde54c8b6cae01e**,4eec07256626bd22] 61583 --- [nio-8000-exec-2] c.s.c.rest.CurrencyExchangeController    : com.shamy1st.currencyexchangeservice.entity.ExchangeValue@42bd2dfc
+
+
 
 
 
