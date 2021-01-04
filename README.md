@@ -76,11 +76,11 @@ Application                                  | URL
 ---------------------------------------------|-----
 Limits Service                               | http://localhost:8080/limits http://localhost:8080/actuator/refresh (POST) 
 Spring Cloud Config Server                   | http://localhost:8888/limits-service/default http://localhost:8888/limits-service/dev
-Currency Convertion Service - Direct Call    | http://localhost:8100/currency-convertion/from/USD/to/EGP/quantity/10
-Currency Convertion Service - Feign          | http://localhost:8100/currency-convertion-feign/from/EUR/to/EGP/quantity/10000
+Currency Converter Service - Direct Call     | http://localhost:8100/currency-converter/from/USD/to/EGP/quantity/10
+Currency Converter Service - Feign           | http://localhost:8100/currency-converter-feign/from/EUR/to/EGP/quantity/10000
 Currency Exchange Service                    | http://localhost:8000/currency-exchange/from/EUR/to/EGP http://localhost:8001/currency-exchange/from/USD/to/EGP
 Eureka                                       | http://localhost:8761/
-Zuul - Currency Exchange & Exchange Services | http://localhost:8765/currency-exchange-service/currency-exchange/from/EUR/to/EGP http://localhost:8765/currency-conversion-service/currency-convertion-feign/from/USD/to/EGP/quantity/10
+Zuul - Currency Exchange & Exchange Services | http://localhost:8765/currency-exchange-service/currency-exchange/from/EUR/to/EGP http://localhost:8765/currency-conversion-service/currency-converter-feign/from/USD/to/EGP/quantity/10
 Zipkin                                       | http://localhost:9411/zipkin/
 Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bus-refresh (POST)
 
@@ -773,6 +773,50 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 * one request go through multiple services, how we can identify it?, **spring cloud sleuth** assign unique id for each request so you can trace it.
 
 ![](https://github.com/shamy1st/spring-microservices/blob/main/images/zipkin-distributed-tracing.png)
+
+* **Implementing Spring Cloud Sleuth**
+
+  * Add Sleuth to Zuul Gateway API
+
+        1. pom.xml
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-sleuth</artifactId>
+            </dependency>
+
+        2. add sampler
+
+            @EnableZuulProxy
+            @EnableDiscoveryClient
+            @SpringBootApplication
+            public class ZuulApiGatewayServerApplication {
+
+                public static void main(String[] args) {
+                    SpringApplication.run(ZuulApiGatewayServerApplication.class, args);
+                }
+
+                public Sampler defaultSampler() {
+                    return Sampler.ALWAYS_SAMPLE;
+                }
+            }
+
+  * Add Sleuth to Currency Exchange Service (same as zuul)
+    * additionally put some logs
+    
+  * Add Sleuth to Currency Conversion Service (same as zuul)
+    * additionally put some logs
+  
+  * hite url: http://localhost:8100/currency-convertion-feign/from/EUR/to/EGP/quantity/100
+
+
+
+
+
+
+
+
+
+
 
 
 
