@@ -860,7 +860,7 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
                 <artifactId>spring-rabbit</artifactId>
             </dependency>
   
-  * downgrade **currency-exchange** to Spring Boot - 2.3.7.RELEASE and Spring Cloud - Hoxton.SR9.
+  * [something wrong check again] downgrade **currency-exchange** to Spring Boot - 2.3.7.RELEASE and Spring Cloud - Hoxton.SR9.
 
 * **Using Zipkin UI Dashboard to trace requests**
 
