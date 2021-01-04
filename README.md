@@ -846,6 +846,30 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
   * now make Zipkin listen to RabbitMQ
   * RABBIT_URI=amqp://localhost java -jar zipkin-server-2.23.2-exec.jar (on windows two seperate commands)
 
+* **Connecting microservices to Zipkin**
+
+  * do the following for **zuul**, **currency-exchange** and **currency-conversion**
+  
+        pom.xml
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-zipkin</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.amqp</groupId>
+                <artifactId>spring-rabbit</artifactId>
+            </dependency>
+  
+  * downgrade **currency-exchange** to Spring Boot - 2.3.7.RELEASE and Spring Cloud - Hoxton.SR9.
+
+* **Using Zipkin UI Dashboard to trace requests**
+
+
+* [Debugging Problems with Zipkin](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-zipkin)
+
+
+
+
 
 
 
