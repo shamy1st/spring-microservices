@@ -770,7 +770,7 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
 
 * if you want to trace any problem, you want one place to look.
 * then you need for distributed tracing (**zipkin**)
-* one request go through multiple services, how we can identify it?, **spring cloud sleuth** assign unique id for each request so you can trace it.
+* one request go through multiple components, how we can identify it?, **spring cloud sleuth** assign unique id for each request so you can trace it.
 
 ![](https://github.com/shamy1st/spring-microservices/blob/main/images/zipkin-distributed-tracing.png)
 
@@ -810,17 +810,41 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
   
   * **Currency Conversion Log**: 
   2021-01-04 10:55:07.719  INFO [currency-conversion-service,**cfde54c8b6cae01e**,cfde54c8b6cae01e,true] 62608 --- [nio-8100-exec-3] c.s.c.rest.CurrencyConversionController  : com.shamy1st.currencyconversionservice.bean.CurrencyConversion@15343b67
+  
   * **Zuul Log**: 
   2021-01-04 10:55:07.626  INFO [zuul-api-gateway-server,**cfde54c8b6cae01e**,3b909545b1e21084,true] 52938 --- [nio-8765-exec-3] c.s.zuulapigatewayserver.LoggingFilter   : request -> org.springframework.cloud.netflix.zuul.filters.pre.Servlet30RequestWrapper@31642a3d request.uri -> /currency-exchange-service/exchange-currency/EUR/EGP
+  
   * **Currency Exchange Log**: 
   2021-01-04 10:55:07.642  INFO [currency-exchange-service,**cfde54c8b6cae01e**,4eec07256626bd22] 61583 --- [nio-8000-exec-2] c.s.c.rest.CurrencyExchangeController    : com.shamy1st.currencyexchangeservice.entity.ExchangeValue@42bd2dfc
 
+  * Now we want one place to show all these logs instead of going through multiple components.
+  * At this point we need for **zipkin** for centralized logs
+  * **centralized logs solutions**: [ELK Stack](https://www.elastic.co/what-is/elk-stack) -> Elasticsearch, Logstash, Kibana
+  * here I will use zipkin solution & RabbitMQ
+  * any component have a log message will put it in the RabbitMQ and then Zipkin server will listen to this queue.
 
+* **Installing RabbitMQ**
 
+  * **Windows**
+    https://www.rabbitmq.com/install-windows.html
+    https://www.rabbitmq.com/which-erlang.html
+    http://www.erlang.org/downloads
+    Video - https://www.youtube.com/watch?v=gKzKUmtOwR4
 
+  * **Mac**
+    https://www.rabbitmq.com/install-homebrew.html
+    
+    launch command: /usr/local/sbin/rabbitmq-server
 
+* **Distributed Tracing with Zipkin**
 
-
+  * https://zipkin.io/pages/quickstart.html
+  * curl -sSL https://zipkin.io/quickstart.sh | bash -s java -jar zipkin.jar
+  * or download jar from url appear after execute the previous command https://repo1.maven.org/maven2/io/zipkin/zipkin-server/2.23.2/zipkin-server-2.23.2-exec.jar
+  * java -jar zipkin-server-2.23.2-exec.jar
+  * http://localhost:9411/zipkin/
+  * now make Zipkin listen to RabbitMQ
+  * RABBIT_URI =amqp://localhost java -jar zipkin-server-2.23.2-exec.jar (on windows two seperate commands)
 
 
 
