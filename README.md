@@ -764,7 +764,13 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
         zuul url: http://localhost:8765/currency-conversion-service/currency-conversion-feign/EUR/EGP/100
         now you can see two requests logs in zuul gateway api console (one for currency-conversion and one for currency-exchange)
 
+* [Debugging Problems with Zuul API Gateway](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-zuul-api-gateway)
+
 ### 2. Zipkin Distributed Tracing (RabbitMQ)
+
+* if you want to trace any problem, you want one place to look.
+* then you need for distributed tracing (**zipkin**)
+* one request go through multiple services, how we can identify it?, **spring cloud sleuth** assign unique id for each request so you can trace it.
 
 ![](https://github.com/shamy1st/spring-microservices/blob/main/images/zipkin-distributed-tracing.png)
 
