@@ -76,11 +76,11 @@ Application                                  | URL
 ---------------------------------------------|-----
 Limits Service                               | http://localhost:8080/limits http://localhost:8080/actuator/refresh (POST) 
 Spring Cloud Config Server                   | http://localhost:8888/limits-service/default http://localhost:8888/limits-service/dev
-Currency Convertion Service - Direct Call    | http://localhost:8100/currency-convertion/USD/EGP/100
-Currency Convertion Service - Feign          | http://localhost:8100/currency-convertion-feign/EUR/EGP/100
+Currency Conversion Service - Direct Call    | http://localhost:8100/currency-conversion/USD/EGP/100
+Currency Conversion Service - Feign          | http://localhost:8100/currency-conversion-feign/EUR/EGP/100
 Currency Exchange Service                    | http://localhost:8000/exchange-currency/EUR/EGP http://localhost:8001/exchange-currency/USD/EGP
 Eureka                                       | http://localhost:8761/
-Zuul - Currency Exchange & Exchange Services | http://localhost:8765/currency-exchange-service/exchange-currency/EUR/EGP http://localhost:8765/currency-conversion-service/currency-convertion-feign/USD/EGP/100
+Zuul - Currency Exchange & Exchange Services | http://localhost:8765/currency-exchange-service/exchange-currency/EUR/EGP http://localhost:8765/currency-conversion-service/currency-conversion-feign/USD/EGP/100
 Zipkin                                       | http://localhost:9411/zipkin/
 Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bus-refresh (POST)
 
@@ -806,7 +806,7 @@ Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bu
   * Add Sleuth to Currency Conversion Service (same as zuul)
     * additionally put some logs
   
-  * hite url: http://localhost:8100/currency-convertion-feign/from/EUR/to/EGP/quantity/100
+  * hite url: http://localhost:8100/currency-conversion-feign/EUR/EGP/100
 
 
 
